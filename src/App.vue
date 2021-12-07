@@ -1,7 +1,7 @@
 <template>
   <div>
     <HelloWorld msg="Welcome to vue and jest Test driven development (TDD)" />
-    <Accordion />
+    <Accordion heading="Accordion heading" />
   </div>
 </template>
 
