@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import Accordion from '@/components/Accordion.vue'
+import { nextTick } from 'vue'
 
 describe('Template....', () => {
   it('Component should exist and render correctly', () => {
@@ -40,8 +41,18 @@ describe('Template....', () => {
   })
 
   it('On button click it should call method toggleAccordion() and toggle isExpanded === true', async () => {
-    const wrapper = shallowMount(Accordion)
-    expect(wrapper.exists()).toBe(true)
+    const onToggleAccordion = jest.spyOn(Accordion.methods, 'onToggleAccordion')
+    const wrapper = shallowMount(Accordion, {
+      propsData: {
+        heading: 'accordion heading',
+      },
+    })
+    const button = wrapper.find('[data-test="button"]')
+    button.trigger('click')
+    expect(onToggleAccordion).toHaveBeenCalled()
+    expect(wrapper.vm.isExpanded).toBe(true)
+    await nextTick() // if removing next tick content should not pass the test as there is async call
+    expect(wrapper.find('[data-test="content"]').exists()).toBe(true)
   })
   it('On button click it should toggle expended data and show class is-expanded', () => {
     const wrapper = shallowMount(Accordion)

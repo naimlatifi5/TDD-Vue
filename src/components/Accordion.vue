@@ -4,12 +4,12 @@
       data-test="button"
       v-if="heading"
       type="button"
-      @click="toggleAccordion"
+      @click="onToggleAccordion"
     >
       <h1 data-test="heading">{{ heading }}</h1>
     </button>
     <div data-test="content" v-if="isExpanded" class="content">
-      Hej here is content
+      Accordion content
     </div>
   </div>
 </template>
@@ -26,7 +26,8 @@ export default {
     heading: String,
   },
   methods: {
-    toggleAccordion() {
+    onToggleAccordion() {
+      this.isExpanded = !this.isExpanded
       console.log('clicked')
     },
   },
