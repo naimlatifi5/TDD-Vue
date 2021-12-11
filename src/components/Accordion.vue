@@ -1,14 +1,15 @@
 <template>
   <div>
-    <button
-      data-test="button"
-      v-if="heading"
-      type="button"
-      @click="onToggleAccordion"
-    >
+    <button data-test="button" v-if="heading" type="button" @click="onToggle">
       <h1 data-test="heading">{{ heading }}</h1>
     </button>
-    <div data-test="content" v-if="isExpanded" class="content">
+    <div
+      data-test="content"
+      :class="{ expanded: isExpanded }"
+      v-if="isExpanded"
+      class="content"
+      :style="setInlineStyleBorder"
+    >
       Accordion content
     </div>
   </div>
@@ -25,13 +26,24 @@ export default {
   props: {
     heading: String,
   },
+  computed: {
+    setInlineStyleBorder() {
+      return this.isExpanded ? 'border: 3px solid green;' : null
+    },
+  },
   methods: {
-    onToggleAccordion() {
+    onToggle() {
       this.isExpanded = !this.isExpanded
-      console.log('clicked')
+      this.$emit('isExpanded', true)
     },
   },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+.content.expanded {
+  color: red;
+
+  padding: 20px;
+}
+</style>

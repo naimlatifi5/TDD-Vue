@@ -3,6 +3,9 @@ import Accordion from '@/components/Accordion.vue'
 import { nextTick } from 'vue'
 
 describe('Template....', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
   it('Component should exist and render correctly', () => {
     const wrapper = shallowMount(Accordion)
     expect(wrapper.exists()).toBe(true)
@@ -21,7 +24,7 @@ describe('Template....', () => {
     expect(wrapper.find('[data-test="button"]').exists()).toBe(false)
   })
 
-  it('Should display Accoridion heading title', () => {
+  it('Should display Accordion heading title', () => {
     const wrapper = shallowMount(Accordion, {
       propsData: {
         heading: 'Accordion heading',
@@ -40,8 +43,8 @@ describe('Template....', () => {
     expect(wrapper.find('[data-test="content"]').exists()).toBe(false)
   })
 
-  it('On button click it should call method toggleAccordion() and toggle isExpanded === true', async () => {
-    const onToggleAccordion = jest.spyOn(Accordion.methods, 'onToggleAccordion')
+  it('On button click it should call method onToggle() and toggle isExpanded === true', async () => {
+    const onToggle = jest.spyOn(Accordion.methods, 'onToggle')
     const wrapper = shallowMount(Accordion, {
       propsData: {
         heading: 'accordion heading',
@@ -49,17 +52,44 @@ describe('Template....', () => {
     })
     const button = wrapper.find('[data-test="button"]')
     button.trigger('click')
-    expect(onToggleAccordion).toHaveBeenCalled()
+    expect(onToggle).toHaveBeenCalled()
     expect(wrapper.vm.isExpanded).toBe(true)
     await nextTick() // if removing next tick content should not pass the test as there is async call
     expect(wrapper.find('[data-test="content"]').exists()).toBe(true)
   })
-  it('On button click it should toggle expended data and show class is-expanded', () => {
-    const wrapper = shallowMount(Accordion)
-    expect(wrapper.exists()).toBe(true)
+  it(`It should add class expanded when isExpanded === true`, () => {
+    const wrapper = shallowMount(Accordion, {
+      data() {
+        return {
+          isExpanded: true,
+        }
+      },
+    })
+    let content = wrapper.find('[data-test="content"]')
+    expect(content.exists()).toBe(true)
+    expect(content.classes()).toContain('expanded')
   })
-  it('On button click it should emitt the id back to parent ad', () => {
-    const wrapper = shallowMount(Accordion)
-    expect(wrapper.exists()).toBe(true)
+
+  it(`It should add inline style with border when isExpanded === true`, () => {
+    const wrapper = shallowMount(Accordion, {
+      data() {
+        return {
+          isExpanded: true,
+        }
+      },
+    })
+    let content = wrapper.find('[data-test="content"]')
+    expect(content.exists()).toBe(true)
+    expect(content.attributes().style).toBe('border: 3px solid green;')
+  })
+
+  it(`It should emit isExpanded when onToggle method is called`, async () => {
+    const wrapper = shallowMount(Accordion, {
+      propsData: {
+        heading: 'Accordion heading',
+      },
+    })
+    wrapper.vm.onToggle()
+    expect(wrapper.emitted('isExpanded')).toBeTruthy()
   })
 })
