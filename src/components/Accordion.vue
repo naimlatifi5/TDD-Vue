@@ -24,7 +24,10 @@ export default {
     }
   },
   props: {
-    heading: String,
+    heading: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     setInlineStyleBorder() {

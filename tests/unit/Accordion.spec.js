@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 import Accordion from '@/components/Accordion.vue'
 import { nextTick } from 'vue'
 
-describe('Template....', () => {
+describe('Test suit for Accordion component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -10,6 +10,7 @@ describe('Template....', () => {
     const wrapper = shallowMount(Accordion)
     expect(wrapper.exists()).toBe(true)
   })
+
   it('Accordion button exist when props heading is passed', () => {
     const wrapper = shallowMount(Accordion, {
       propsData: {
